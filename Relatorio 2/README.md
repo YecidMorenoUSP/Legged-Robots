@@ -90,6 +90,7 @@ Como era esperado o offset que se tinha nos testes passados, sumirám e o acompa
 
 ## 1.7 - Joint PD + gravity + Feed-Forward term
 Esperando desacoplar dinámicamente as juntas, para vitar movimentos indesceados, é usado um Feed-Foward $\mathit{ff}$ para compensar os efeitos entre cada uns dos atuadores, permitindo un controle mais simple por cada atuador. O jeito de dar solução é dado pela seguinte equação:
+
 $$ \tau_{fb} = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
           \bold{K_d}\times(\bold{q^d} - \bold{q}) $$
 $$ \tau_{ff} = \bold{M(q)} \times (\bold{\ddot{q} + \tau_{fb}})$$
