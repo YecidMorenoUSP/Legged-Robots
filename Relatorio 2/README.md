@@ -4,7 +4,7 @@
 ## **1. Decentralized control (Lecture G0)**
 ## 1.1 - Sinusoidal reference generation:
 
-$$\bold{q^{d}} =  \bm{q_0}+ \bold{A} \cdot \sin\left( \bold{\omega} \cdot t + \bold{\phi}\right)$$
+$$\bold{q^{d}} =  \textbf{q_0}+ \bold{A} \cdot \sin\left( \bold{\omega} \cdot t + \bold{\phi}\right)$$
 $$\bold{\dot q^{d}} = \frac{d}{dt}\left(
     \bold{q_0}+\bold{A} \cdot \sin \left(\bold{\omega} * t  + \bold{\phi}\right)
     \right) = 
@@ -72,5 +72,5 @@ Neste ponto, são aumentados os valores de $\bold{K_p}$ para  $600 Nm/rad$, obte
 ![img/fig_1.4.2_position.png](img/fig_1.4.2_position.png)
 
 ## 1.5 - Joint PD control critical damping
-
+..3+4^2..
 ![img/fig_1.5_position.png](img/fig_1.5_position.png)
