@@ -15,7 +15,7 @@ $$\mathbf{\ddot q^{d}}\frac{d}{dt}\left(
 -\mathbf{A} \cdot \mathbf{\omega}^{2} \cdot  \sin \left(\mathbf{\omega}\cdot t  + \mathbf{\phi} \right)$$
 
 Aonde:
-$$ \mathbf{\omega} = 2 \cdot pi \cdot \mathbf{freq} $$
+$$\mathbf{\omega} = 2 \cdot pi \cdot \mathbf{freq}$$
 
 Os termo $\mathbf{q_0}$ faz rerencia a pocisão atual do robô, o objetivo é que a sinal gerada tenha inicio no ponto atual do robô para evitar um inicio suave por parte do robô. as constantes $\mathbf{A}$ , $\mathbf{freq}$ e $\mathbf{\phi}$ são vetores que contem cada uno dos valores configurados por junta.
 
@@ -48,13 +48,14 @@ else:
 ```
 
 No seguinte grafico podem se olhar as trajetorias desejadas em vermelho, com os parametros ajustados de acordo.
+
 ![img/fig_1.2_position.png](img/fig_1.2_position.png)
 
 ## 1.3 - Joint PD control:
 Conhecemdo que a lei de controle para um controlador PD é simplesmente calcular o erro de pocição e velocidade multiplicados por un ganho, cujas unidades no final dos calculos seráo as mesmas do Torque [$N \cdot m$], de tal forma que:
 
-$$ \tau = \mathbf{K_p}\times(\mathbf{\dot q^d} - \mathbf{\dot q}) +
-          \mathbf{K_d}\times(\mathbf{q^d} - \mathbf{q}) $$
+$$\tau = \mathbf{K_p}\times(\mathbf{\dot q^d} - \mathbf{\dot q}) +
+          \mathbf{K_d}\times(\mathbf{q^d} - \mathbf{q})$$
 
 Sendo que $\mathbf{K_p}$ e $\mathbf{K_d}$ são matrizes diagonais com cada um dos ganhos correspondentes por junta.
 
@@ -74,7 +75,7 @@ Neste ponto, são aumentados os valores de $\mathbf{K_p}$ para  $600 Nm/rad$, ob
 ## 1.5 - Joint PD control critical damping
 
 Usando a seguinte equação, podemos calcular os valores de amortecimento que levam a um comportamento criticamente amortecido.
-$$ \mathbf{K_d} = 2\cdot \sqrt{\mathbf{K_p} \times \mathbf{M(q)}} $$
+$$\mathbf{K_d} = 2\cdot \sqrt{\mathbf{K_p} \times \mathbf{M(q)}}$$
 Ainda se mantem o erro de regimen anterior, pois la gravedad ainda está aplicando forças sobre o atuador.
 ![img/fig_1.5_position.png](img/fig_1.5_position.png)
 
@@ -91,10 +92,10 @@ Como era esperado o offset que se tinha nos testes passados, sumirám e o acompa
 ## 1.7 - Joint PD + gravity + Feed-Forward term
 Esperando desacoplar dinámicamente as juntas, para vitar movimentos indesceados, é usado um Feed-Foward $\mathit{ff}$ para compensar os efeitos entre cada uns dos atuadores, permitindo un controle mais simple por cada atuador. O jeito de dar solução é dado pela seguinte equação:
 
-$$ \tau_{fb} = \mathbf{K_p}\times(\mathbf{\dot q^d} - \mathbf{\dot q}) +
-          \mathbf{K_d}\times(\mathbf{q^d} - \mathbf{q}) $$
-$$ \tau_{ff} = \mathbf{M(q)} \times (\mathbf{\ddot{q} + \tau_{fb}})$$
-$$  \tau = \tau_{fb} + \tau_{ff}$$
+$$\tau_{fb} = \mathbf{K_p}\times(\mathbf{\dot q^d} - \mathbf{\dot q}) +
+          \mathbf{K_d}\times(\mathbf{q^d} - \mathbf{q})$$
+$$\tau_{ff} = \mathbf{M(q)} \times (\mathbf{\ddot{q} + \tau_{fb}})$$
+$$ \tau = \tau_{fb} + \tau_{ff}$$
 
 O resultado é simplesmente satisfatorio, pois foram quase eliminados os efeitos de propagação de movimento por parte das outras juntas.
 
