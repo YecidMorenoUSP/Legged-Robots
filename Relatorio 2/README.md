@@ -64,12 +64,16 @@ Os resultados são medianamente esperados esperados, na $\mathbf{j_2}$, pois o c
 > É facilmente perceptivel que os movimentos efetuados pelos atuadores fazem que aos outras juntas qué em teoría náo deveriam ter deslocamento tenham um comportamento diferente, causado pela propagação do movimento.
 
 ![img/fig_1.3.1_position.png](img/fig_1.3.1_position.png)
+
 Emquanto o comportamento na refrencia Step, é facilmente perceptivel que a $\mathbf{j_2}$ possui um erro de regimen a diferençã de $\mathbf{j_5}$ que tem um comportamento criticamente amortecido.
+
 ![img/fig_1.3.2_position.png](img/fig_1.3.2_position.png)
 
 ## 1.4 - Joint PD control – high gains:
 Neste ponto, são aumentados os valores de $\mathbf{K_p}$ para  $600 Nm/rad$, obtendo um erro de regimen menor nos dois tipos de referencia desejada, o problema de solucionar o erro de regimen neste caso só aumentando o valor de $K_p$ é que na hora de sair da simulação e levar para a realidade, as limitações mecânicas e eletricas não serão suficientes.
+
 ![img/fig_1.4.1_position.png](img/fig_1.4.1_position.png)
+
 ![img/fig_1.4.2_position.png](img/fig_1.4.2_position.png)
 
 ## 1.5 - Joint PD control critical damping
@@ -77,6 +81,7 @@ Neste ponto, são aumentados os valores de $\mathbf{K_p}$ para  $600 Nm/rad$, ob
 Usando a seguinte equação, podemos calcular os valores de amortecimento que levam a um comportamento criticamente amortecido.
 $$\mathbf{K_d} = 2\cdot \sqrt{\mathbf{K_p} \times \mathbf{M(q)}}$$
 Ainda se mantem o erro de regimen anterior, pois la gravedad ainda está aplicando forças sobre o atuador.
+
 ![img/fig_1.5_position.png](img/fig_1.5_position.png)
 
 ## 1.6 - Joint PD control + Gravity Compensation
@@ -95,7 +100,7 @@ Esperando desacoplar dinámicamente as juntas, para vitar movimentos indesceados
 $$\tau_{fb} = \mathbf{K_p}\times(\mathbf{\dot q^d} - \mathbf{\dot q}) +
           \mathbf{K_d}\times(\mathbf{q^d} - \mathbf{q})$$
 $$\tau_{ff} = \mathbf{M(q)} \times (\mathbf{\ddot{q} + \tau_{fb}})$$
-$$ \tau = \tau_{fb} + \tau_{ff}$$
+$$\tau = \tau_{fb} + \tau_{ff}$$
 
 O resultado é simplesmente satisfatorio, pois foram quase eliminados os efeitos de propagação de movimento por parte das outras juntas.
 
