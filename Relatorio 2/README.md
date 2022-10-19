@@ -4,7 +4,7 @@
 ## **1. Decentralized control (Lecture G0)**
 ## 1.1 - Sinusoidal reference generation:
 
-$$\bold{q^{d}} =  \textbf{q_0}+ \bold{A} \cdot \sin\left( \bold{\omega} \cdot t + \bold{\phi}\right)$$
+$$\bold{q^{d}} =  \bold{q_0}+ \bold{A} \cdot \sin\left( \bold{\omega} \cdot t + \bold{\phi}\right)$$
 $$\bold{\dot q^{d}} = \frac{d}{dt}\left(
     \bold{q_0}+\bold{A} \cdot \sin \left(\bold{\omega} * t  + \bold{\phi}\right)
     \right) = 
