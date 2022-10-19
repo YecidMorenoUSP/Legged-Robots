@@ -72,5 +72,28 @@ Neste ponto, são aumentados os valores de $\bold{K_p}$ para  $600 Nm/rad$, obte
 ![img/fig_1.4.2_position.png](img/fig_1.4.2_position.png)
 
 ## 1.5 - Joint PD control critical damping
-..3+4^2..
+
+Usando a seguinte equação, podemos calcular os valores de amortecimento que levam a um comportamento criticamente amortecido.
+$$ \bold{K_d} = 2\cdot \sqrt{\bold{K_p} \times \bold{M(q)}} $$
+Ainda se mantem o erro de regimen anterior, pois la gravedad ainda está aplicando forças sobre o atuador.
 ![img/fig_1.5_position.png](img/fig_1.5_position.png)
+
+## 1.6 - Joint PD control + Gravity Compensation
+Até o momento temos um controlador PD convencional, agora vai ser acresentado um novo termo $\bold{G(q)}$, que indica qual é a forçã aplicada pela gravidade em cada junta, si colocamos este termo somando, os efeitos da gravidade seráo compensados
+
+$$ \tau = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
+          \bold{K_d}\times(\bold{q^d} - \bold{q}) + \bold{G(q)}$$
+
+Como era esperado o offset que se tinha nos testes passados, sumirám e o acompanhamento da trajetoria é mais acorde na referencia.
+
+![img/fig_1.6_position.png](img/fig_1.6_position.png)
+
+## 1.7 - Joint PD + gravity + Feed-Forward term
+Esperando desacoplar dinámicamente as juntas, para vitar movimentos indesceados, é usado um Feed-Foward $\mathit{ff}$ para compensar os efeitos entre cada uns dos atuadores, permitindo un controle mais simple por cada atuador. O jeito de dar solução é dado pela seguinte equação:
+$$ \tau_{fb} = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
+          \bold{K_d}\times(\bold{q^d} - \bold{q}) $$
+$$ \tau_{ff} = \bold{M(q)} \times (\bold{\ddot{q} + \tau_{fb}})$$
+$$  \tau = \tau_{fb} + \tau_{ff}$$
+
+O resultado é simplesmente satisfatorio, pois foram quase eliminados os efeitos de propagação de movimento por parte das outras juntas.
+![img/fig_1.7_position.png](img/fig_1.7_position.png)
