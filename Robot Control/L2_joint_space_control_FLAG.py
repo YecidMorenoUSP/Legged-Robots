@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Oct 19 09:20:14 2022
+
+@author: student
+"""
+
+
 #common stuff 
 import pinocchio as pin
 from pinocchio.utils import *
@@ -11,61 +20,6 @@ import os
 from base_controllers.utils.common_functions import *
 from base_controllers.utils.ros_publish import RosPub
 
-import ex_2_conf as conf
-
-FLAG = {}
-
-FLAG['SHOW_ANIMATION'] = False
-FLAG['SIN_WAVE'] = False
-FLAG['SQUARE_WAVE'] = False
-FLAG['PD_CONTROL'] = False
-FLAG['CRITICAL_DAMPING'] = False
-FLAG['GRAVITY_COMPENSATION'] = False
-FLAG['FEED_FOWARD'] = False
-FLAG['EXTERNAL_FORCE'] = False
-FLAG['POINTS'] = ['1.1','1.2','1.3','1.4','1.5','1.6','1.7']
-FLAG['POINT'] = FLAG['POINTS'][6]
-
-#for POINT in FLAG['POINTS']:
-#    FLAG['POINT'] = POINT
-    
-
-    
-POINT = FLAG['POINT']
-if(POINT == '1.1'):
-    FLAG['SIN_WAVE'] = True
-elif(POINT == '1.2'):
-    FLAG['SQUARE_WAVE'] = True
-elif(POINT == '1.3'):
-    FLAG['SQUARE_WAVE'] = True
-    FLAG['PD_CONTROL'] = True
-    kp = np.eye(6)*300
-    kd = np.eye(6)*20
-elif(POINT == '1.4'):
-    FLAG['SQUARE_WAVE'] = True
-    FLAG['PD_CONTROL'] = True
-    kp = np.eye(6)*600
-    kd = np.eye(6)*30
-    dt = 0.0001
-elif(POINT == '1.5'):
-    FLAG['SQUARE_WAVE'] = True
-    FLAG['PD_CONTROL'] = True
-    FLAG['CRITICAL_DAMPING'] = True
-    kp = np.eye(6)*300
-    kd = np.eye(6)*20
-elif(POINT == '1.6'):
-    FLAG['SIN_WAVE'] = True
-    FLAG['PD_CONTROL'] = True
-    FLAG['GRAVITY_COMPENSATION'] = True
-elif(POINT == '1.7'):
-    kp = np.eye(6)*300
-    kd = np.eye(6)*40
-    FLAG['SIN_WAVE'] = True
-    FLAG['PD_CONTROL'] = True
-    FLAG['GRAVITY_COMPENSATION'] = True
-    FLAG['FEED_FOWARD'] = True
-    FLAG['EXTERNAL_FORCE'] = True
-    
 
 #instantiate graphic utils
 os.system("killall rosmaster rviz")
