@@ -81,7 +81,7 @@ Ainda se mantem o erro de regimen anterior, pois la gravedad ainda está aplican
 ## 1.6 - Joint PD control + Gravity Compensation
 Até o momento temos um controlador PD convencional, agora vai ser acresentado um novo termo $\bold{G(q)}$, que indica qual é a forçã aplicada pela gravidade em cada junta, si colocamos este termo somando, os efeitos da gravidade seráo compensados
 
-$$ \tau = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
+$$\tau = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
           \bold{K_d}\times(\bold{q^d} - \bold{q}) + \bold{G(q)}$$
 
 Como era esperado o offset que se tinha nos testes passados, sumirám e o acompanhamento da trajetoria é mais acorde na referencia.

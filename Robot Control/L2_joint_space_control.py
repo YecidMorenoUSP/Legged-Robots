@@ -24,7 +24,7 @@ FLAG['GRAVITY_COMPENSATION'] = False
 FLAG['FEED_FOWARD'] = False
 FLAG['EXTERNAL_FORCE'] = False
 FLAG['POINTS'] = ['1.1','1.2','1.3','1.3.1','1.3.2','1.4','1.5','1.6','1.7']
-FLAG['POINT'] = '1.5'
+FLAG['POINT'] = '1.7'
 
 #for POINT in FLAG['POINTS']:
 #    FLAG['POINT'] = POINT
@@ -78,15 +78,16 @@ elif(POINT == '1.5'):
 elif(POINT == '1.6'):
     FLAG['SIN_WAVE'] = True
     FLAG['PD_CONTROL'] = True
+    FLAG['CRITICAL_DAMPING'] = True
     FLAG['GRAVITY_COMPENSATION'] = True
 elif(POINT == '1.7'):
     conf.kp = np.eye(6)*300
     conf.kd = np.eye(6)*40
     FLAG['SIN_WAVE'] = True
     FLAG['PD_CONTROL'] = True
+    FLAG['CRITICAL_DAMPING'] = True
     FLAG['GRAVITY_COMPENSATION'] = True
     FLAG['FEED_FOWARD'] = True
-    FLAG['EXTERNAL_FORCE'] = False
     
 
 #instantiate graphic utils
