@@ -15,7 +15,7 @@ $$\bold{\ddot q^{d}}\frac{d}{dt}\left(
 -\bold{A} \cdot \bold{\omega}^{2} \cdot  \sin \left(\bold{\omega}\cdot t  + \bold{\phi} \right)$$
 
 Aonde:
-$$ \bold{\omega} = 2 \cdot pi \cdot \bold{freq} $$
+$$\bold{\omega} = 2 \cdot pi \cdot \bold{freq}$$
 
 Os termo $\bold{q_0}$ faz rerencia a pocisão atual do robô, o objetivo é que a sinal gerada tenha inicio no ponto atual do robô para evitar um inicio suave por parte do robô. as constantes $\bold{A}$ , $\bold{freq}$ e $\bold{\phi}$ são vetores que contem cada uno dos valores configurados por junta.
 
@@ -53,8 +53,8 @@ No seguinte grafico podem se olhar as trajetorias desejadas em vermelho, com os 
 ## 1.3 - Joint PD control:
 Conhecemdo que a lei de controle para um controlador PD é simplesmente calcular o erro de pocição e velocidade multiplicados por un ganho, cujas unidades no final dos calculos seráo as mesmas do Torque [$N \cdot m$], de tal forma que:
 
-$$ \tau = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
-          \bold{K_d}\times(\bold{q^d} - \bold{q}) $$
+$$\tau = \mathbf{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
+          \bold{K_d}\times(\bold{q^d} - \bold{q})$$
 
 Sendo que $\bold{K_p}$ e $\bold{K_d}$ são matrizes diagonais com cada um dos ganhos correspondentes por junta.
 
@@ -63,19 +63,24 @@ Os resultados são medianamente esperados esperados, na $\bold{j_2}$, pois o con
 > É facilmente perceptivel que os movimentos efetuados pelos atuadores fazem que aos outras juntas qué em teoría náo deveriam ter deslocamento tenham um comportamento diferente, causado pela propagação do movimento.
 
 ![img/fig_1.3.1_position.png](img/fig_1.3.1_position.png)
+
 Emquanto o comportamento na refrencia Step, é facilmente perceptivel que a $\bold{j_2}$ possui um erro de regimen a diferençã de $\bold{j_5}$ que tem um comportamento criticamente amortecido.
+
 ![img/fig_1.3.2_position.png](img/fig_1.3.2_position.png)
 
 ## 1.4 - Joint PD control – high gains:
 Neste ponto, são aumentados os valores de $\bold{K_p}$ para  $600 Nm/rad$, obtendo um erro de regimen menor nos dois tipos de referencia desejada, o problema de solucionar o erro de regimen neste caso só aumentando o valor de $K_p$ é que na hora de sair da simulação e levar para a realidade, as limitações mecânicas e eletricas não serão suficientes.
+
 ![img/fig_1.4.1_position.png](img/fig_1.4.1_position.png)
+
 ![img/fig_1.4.2_position.png](img/fig_1.4.2_position.png)
 
 ## 1.5 - Joint PD control critical damping
 
 Usando a seguinte equação, podemos calcular os valores de amortecimento que levam a um comportamento criticamente amortecido.
-$$ \bold{K_d} = 2\cdot \sqrt{\bold{K_p} \times \bold{M(q)}} $$
+$$\bold{K_d} = 2\cdot \sqrt{\bold{K_p} \times \bold{M(q)}}$$
 Ainda se mantem o erro de regimen anterior, pois la gravedad ainda está aplicando forças sobre o atuador.
+
 ![img/fig_1.5_position.png](img/fig_1.5_position.png)
 
 ## 1.6 - Joint PD control + Gravity Compensation
@@ -91,10 +96,10 @@ Como era esperado o offset que se tinha nos testes passados, sumirám e o acompa
 ## 1.7 - Joint PD + gravity + Feed-Forward term
 Esperando desacoplar dinámicamente as juntas, para vitar movimentos indesceados, é usado um Feed-Foward $\mathit{ff}$ para compensar os efeitos entre cada uns dos atuadores, permitindo un controle mais simple por cada atuador. O jeito de dar solução é dado pela seguinte equação:
 
-$$ \tau_{fb} = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
-          \bold{K_d}\times(\bold{q^d} - \bold{q}) $$
-$$ \tau_{ff} = \bold{M(q)} \times (\bold{\ddot{q} + \tau_{fb}})$$
-$$  \tau = \tau_{fb} + \tau_{ff}$$
+$$\tau_{fb} = \bold{K_p}\times(\bold{\dot q^d} - \bold{\dot q}) +
+          \bold{K_d}\times(\bold{q^d} - \bold{q})$$
+$$\tau_{ff} = \bold{M(q)} \times (\bold{\ddot{q} + \tau_{fb}})$$
+$$\tau = \tau_{fb} + \tau_{ff}$$
 
 O resultado é simplesmente satisfatorio, pois foram quase eliminados os efeitos de propagação de movimento por parte das outras juntas.
 ![img/fig_1.7_position.png](img/fig_1.7_position.png)
