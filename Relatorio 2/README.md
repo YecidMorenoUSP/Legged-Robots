@@ -73,6 +73,4 @@ Neste ponto, são aumentados os valores de $\bold{K_p}$ para  $600 Nm/rad$, obte
 
 ## 1.5 - Joint PD control critical damping
 
-
-
 ![img/fig_1.5_position.png](img/fig_1.5_position.png)

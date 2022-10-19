@@ -23,8 +23,8 @@ FLAG['CRITICAL_DAMPING'] = False
 FLAG['GRAVITY_COMPENSATION'] = False
 FLAG['FEED_FOWARD'] = False
 FLAG['EXTERNAL_FORCE'] = False
-FLAG['POINTS'] = ['1.1','1.2','1.3','1.4','1.5','1.6','1.7']
-FLAG['POINT'] = FLAG['POINTS'][6]
+FLAG['POINTS'] = ['1.1','1.2','1.3','1.3.1','1.3.2','1.4','1.5','1.6','1.7']
+FLAG['POINT'] = '1.5'
 
 #for POINT in FLAG['POINTS']:
 #    FLAG['POINT'] = POINT
@@ -39,32 +39,54 @@ elif(POINT == '1.2'):
 elif(POINT == '1.3'):
     FLAG['SQUARE_WAVE'] = True
     FLAG['PD_CONTROL'] = True
-    kp = np.eye(6)*300
-    kd = np.eye(6)*20
+    conf.kp = np.eye(6)*300
+    conf.kd = np.eye(6)*20
+elif(POINT == '1.3.1'):
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL'] = True
+    conf.kp = np.eye(6)*300
+    conf.kd = np.eye(6)*20
+elif(POINT == '1.3.2'):
+    FLAG['SQUARE_WAVE'] = True
+    FLAG['PD_CONTROL'] = True
+    conf.kp = np.eye(6)*300
+    conf.kd = np.eye(6)*20
 elif(POINT == '1.4'):
     FLAG['SQUARE_WAVE'] = True
     FLAG['PD_CONTROL'] = True
-    kp = np.eye(6)*600
-    kd = np.eye(6)*30
-    dt = 0.0001
+    conf.kp = np.eye(6)*600
+    conf.kd = np.eye(6)*30
+    conf.dt = 0.0001
+elif(POINT == '1.4.1'):
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL'] = True
+    conf.kp = np.eye(6)*600
+    conf.kd = np.eye(6)*30
+    conf.dt = 0.0001
+elif(POINT == '1.4.2'):
+    FLAG['SQUARE_WAVE'] = True
+    FLAG['PD_CONTROL'] = True
+    conf.kp = np.eye(6)*600
+    conf.kd = np.eye(6)*30
+    conf.dt = 0.0001
 elif(POINT == '1.5'):
     FLAG['SQUARE_WAVE'] = True
     FLAG['PD_CONTROL'] = True
     FLAG['CRITICAL_DAMPING'] = True
-    kp = np.eye(6)*300
-    kd = np.eye(6)*20
+    conf.kp = np.eye(6)*300
+    conf.kd = np.eye(6)*20
 elif(POINT == '1.6'):
     FLAG['SIN_WAVE'] = True
     FLAG['PD_CONTROL'] = True
     FLAG['GRAVITY_COMPENSATION'] = True
 elif(POINT == '1.7'):
-    kp = np.eye(6)*300
-    kd = np.eye(6)*40
+    conf.kp = np.eye(6)*300
+    conf.kd = np.eye(6)*40
     FLAG['SIN_WAVE'] = True
     FLAG['PD_CONTROL'] = True
     FLAG['GRAVITY_COMPENSATION'] = True
     FLAG['FEED_FOWARD'] = True
-    FLAG['EXTERNAL_FORCE'] = True
+    FLAG['EXTERNAL_FORCE'] = False
     
 
 #instantiate graphic utils
@@ -124,9 +146,9 @@ while True:
     
     # EXERCISE 1.1: Sinusoidal reference Generation
     if FLAG.get('SIN_WAVE',False):
-        q_des   = conf.q0 + conf.amp*np.sin(two_pi_f*time)
-        qd_des  = two_pi_f_amp * np.cos(two_pi_f*time);
-        qdd_des = - two_pi_f_squared_amp * np.sin(two_pi_f*time);
+        q_des   = conf.q0 + conf.amp*np.sin(two_pi_f*time + conf.phi)
+        qd_des  = two_pi_f_amp * np.cos(two_pi_f*time + conf.phi);
+        qdd_des = - two_pi_f_squared_amp * np.sin(two_pi_f*time + conf.phi);
         if time >= conf.exp_duration_sin:
             q_des = conf.q0
             qd_des= zero
@@ -183,19 +205,7 @@ while True:
     if FLAG.get('FEED_FOWARD',False):
         tauFF = M.dot(qdd_des + tauControl)
         tau += tauFF
-    
-    # EXERCISE 2.1 Inverse Dynamics (Computed Torque)
-#    tau = ...
-    
-    # EXERCISE 2.5 Inverse Dynamics (Computed Torque) - uncertainty in the cancellation   
-#    M_hat  = ...
-#    h_hat  = ...
-#    tau = ...
 
-    # EXERCISE 2.6  Inverse Dynamics (Desired states)
-#    M_des = robot.mass(q_des)
-#    h_des = robot.nle(q_des, qd_des)
-#    tau = ...
     			 
     if FLAG.get('EXTERNAL_FORCE',False):   		
         # EXERCISE 2.4: Add external force at T = 3.0s
