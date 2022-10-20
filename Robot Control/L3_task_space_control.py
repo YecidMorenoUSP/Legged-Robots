@@ -12,9 +12,73 @@ from base_controllers.utils.ros_publish import RosPub
 from base_controllers.utils.math_tools import Math
 import ex_3_conf as conf
 
+FLAG = {}
+
+FLAG['SHOW_ANIMATION'] = False
+FLAG['SIN_WAVE'] = False
+FLAG['SQUARE_WAVE'] = False
+FLAG['PD_CONTROL'] = False
+FLAG['PD_CONTROL_EA'] = False
+FLAG['POSTURAL_TASK'] = False
+FLAG['GRAVITY_COMPENSATION'] = False
+FLAG['FEED_FOWARD'] = False
+FLAG['CARTESIAN_ID'] = False
+FLAG['CARTESIAN_ID_SIMPLE'] = False
+FLAG['LIMS'] = 1
+FLAG['POINTS'] = ['1.1','1.2','1.4']
+FLAG['POINT'] = '2.2'
+    
+POINT = FLAG['POINT']
+if(POINT == '1.1'):
+    FLAG['LIMS'] = 3
+    FLAG['SIN_WAVE'] = True
+elif(POINT == '1.2'):
+    FLAG['SQUARE_WAVE'] = True
+    FLAG['LIMS'] = 3
+elif(POINT == '1.4'):
+    FLAG['PD_CONTROL'] = True
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['LIMS'] = 3
+elif(POINT == '1.5'):
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['LIMS'] = 3
+elif(POINT == '1.6'):    
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['GRAVITY_COMPENSATION'] = True
+    FLAG['LIMS'] = 2
+elif(POINT == '1.7'):       
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['GRAVITY_COMPENSATION'] = True
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['FEED_FOWARD'] = True
+    FLAG['LIMS'] = 2
+elif(POINT == '2.1'):       
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['FEED_FOWARD'] = True
+    FLAG['CARTESIAN_ID'] = True
+    FLAG['LIMS'] = 1
+elif(POINT == '2.2'):       
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['FEED_FOWARD'] = True
+    FLAG['CARTESIAN_ID_SIMPLE'] = True
+    FLAG['LIMS'] = 1
+    
+    
 #instantiate graphic utils
 os.system("killall rosmaster rviz")
-ros_pub = RosPub("ur5")
+if FLAG.get('SHOW_ANIMATION'):
+    ros_pub = RosPub("ur5")
 robot = getRobotModel("ur5")
 
 math_utils = Math()
@@ -22,7 +86,7 @@ math_utils = Math()
 zero = np.array([0.0, 0.0,0.0, 0.0, 0.0, 0.0])
 zero_cart = np.array([ 0.0, 0.0,0.0])
 time = 0.0
-tau = 0
+
 two_pi_f             = 2*np.pi*conf.freq   # frequency (time 2 PI)
 two_pi_f_amp         = np.multiply(two_pi_f, conf.amp) 
 two_pi_f_squared_amp = np.multiply(two_pi_f, two_pi_f_amp)
@@ -77,12 +141,29 @@ FirstTime = True
 # CONTROL LOOP
 while True:
     
+    
     # EXERCISE 1.1: Sinusoidal reference generation for the end effector   
+    if FLAG.get('SIN_WAVE',False):
+        p_des   = p0 + conf.amp*np.sin(two_pi_f*time + conf.phi)
+        pd_des  = two_pi_f_amp * np.cos(two_pi_f*time + conf.phi);
+        pdd_des = - two_pi_f_squared_amp * np.sin(two_pi_f*time + conf.phi);
+        if time >= conf.exp_duration_sin:
+            p_des = p0
+            pd_des= pd0
+            pdd_des= pdd0 
 
-    # Set constant reference after a while
+    #  EXERCISE 1.2: Step reference generation for the end effector 
+    if FLAG.get('SQUARE_WAVE',False):
+        if time > 2.0:
+            p_des = p0 + conf.amp
+            qd_des =  pd0
+            qdd_des = pdd0
+        else:
+            p_des = p0
+            pd_des = pd0
+            pdd_des= pdd0 
 
         
-    #  EXERCISE 1.2: Step reference generation for the end effector 
 
 
 #    EXERCISE 2.3: Constant reference
@@ -129,19 +210,52 @@ while True:
     #Null space projector I - (JTpinv )^-1 * JTpinv => I  - JT *JTpiv
     N = eye(6)-J.T.dot(JTpinv)
     
+    tau = 0    
+    
+    if FLAG.get('PD_CONTROL',False) :
+        None
+    
     # EXERCISE 1.4: PD control (cartesian task)  
+    tauControl = 0
+    tau_EA = 0
+    if FLAG.get('PD_CONTROL_EA',False) :
+        tauControl =  conf.Kx.dot(p_des-p) + conf.Dx.dot(pd_des - pd) 
+        tau_EA = J.T.dot( tauControl )
+        tau += tau_EA
       
+    tau_null = 0
     # EXERCISE 1.5: PD control (cartesian task) + postural task  
-    # null space torques (postural task)
+    if FLAG.get('POSTURAL_TASK',False) :
+        tau_0 = conf.Kq*(conf.q0-q) - conf.Dq*qd
+        tau_null = N.dot(tau_0)
+        tau += tau_null
     
-    # EXERCISE 1.6: PD control + Gravity Compensation:
-      
-        
+    tauGnull = 0
+    # EXERCISE 1.6: PD control + Gravity Compensation:    
+    if FLAG.get('GRAVITY_COMPENSATION',False) :
+        tauGnull = J.T.dot(JTpinv.dot(g))
+        tau += tauGnull
+    
+    tau_ff = 0
     # EXERCISE 1.7: PD control  + Gravity Compensation + Feed-Forward term
-         
-    # EXERCISE 2.1: Cartesian space inverse dynamics
+    if FLAG.get('FEED_FOWARD',False) :
+        tau_ff = J.T.dot(lambda_.dot(pdd_des))
+        tau += tau_ff 
     
-     # EXERCISE 2.2: Cartesian space inverse dynamics with bias compensation in joint space (simpler to compute)
+    tau_ID = 0
+    # EXERCISE 2.1: Cartesian space inverse dynamics
+    if FLAG.get('CARTESIAN_ID',False) :  
+        Fdes = pdd_des + tauControl
+        mu =  JTpinv.dot(h)-lambda_.dot(Jdqd)
+        tau_ID = J.T.dot( lambda_.dot(Fdes) + mu) + tau_null
+        tau = tau_ID
+    
+    tau_ID_S = 0
+    # EXERCISE 2.2: Cartesian space inverse dynamics with bias compensation in joint space (simpler to compute)
+    if FLAG.get('CARTESIAN_ID_SIMPLE',False) :      
+        Fdes = pdd_des + tauControl
+        tau_ID_S = J.T.dot( lambda_.dot(Fdes)) + tau_null + h
+        tau = tau_ID_S
 
 
      # EXERCISE 3.1:  Control of orientation with PD: constant orientation
@@ -254,27 +368,58 @@ while True:
     # update time
     time = time + conf.dt                  
     
-    # plot ball at the end-effector
-    ros_pub.add_marker(p)                   
-    #publish joint variables
-    ros_pub.publish(robot, q, qd, tau)                   
-    tm.sleep(conf.dt*conf.SLOW_FACTOR)
+    
+    if FLAG.get('SHOW_ANIMATION'):
+        # plot ball at the end-effector
+        ros_pub.add_marker(p)                   
+        #publish joint variables
+        ros_pub.publish(robot, q, qd, tau)                   
+        tm.sleep(conf.dt*conf.SLOW_FACTOR)
     
     # stops the while loop if  you prematurely hit CTRL+C                    
-    if ros_pub.isShuttingDown():
-        print ("Shutting Down")                    
-        break;            
-ros_pub.deregister_node()
+    if FLAG.get('SHOW_ANIMATION'):
+        if ros_pub.isShuttingDown():
+            print ("Shutting Down")                    
+            break;            
+if FLAG.get('SHOW_ANIMATION'):
+    ros_pub.deregister_node()
       
 #plot position
 plotEndeff('position', 1,time_log, p_log, p_des_log)
-#plotEndeff('velocity', 2, time_log, p_log, p_des_log, pd_log, pd_des_log, rpy_log, rpy_des_log)
+plotEndeff('velocity', 2, time_log, p_log, p_des_log, pd_log, pd_des_log, rpy_log, rpy_des_log)
 try:
     ORIENTATION_CONTROL
     plotEndeff('orientation', 3,time_log, p_log, p_des_log, pd_log, pd_des_log, rpy_log, rpy_des_log)
     plotEndeff('orientation', 4,time_log, p_log, p_des_log, pd_log, pd_des_log, error_o_log)
 except: 
     pass   
-plt.show(block=True)
+
+if FLAG.get('LIMS',1) == 1:
+    ylims = (p0[0]+np.array([-1,1])*conf.amp[0]*1.3,
+             p0[1]+np.array([-1,1])*.0003,
+             p0[2]+np.array([-1,.4])*.002)
+elif FLAG.get('LIMS',1) == 2:
+    ylims = (p0[0]+np.array([-1,1])*conf.amp[0]*1.3,
+             p0[1]+np.array([-1,1])*.005,
+             p0[2]+np.array([-1,1])*.008)
+elif FLAG.get('LIMS',1) == 3:
+    ylims = (p0[0]+np.array([-1,1])*conf.amp[0]*1.5,
+             p0[1]+np.array([-1,1])*.025,
+             p0[2]+np.array([-1,.2])*.15)
+
+figs = list(map(plt.figure, plt.get_fignums()));
+for idx,f in enumerate(figs):
+    ax = f.get_axes()
+    if(idx == 0):
+        ax[0].set_ylim(ylims[0])
+        ax[1].set_ylim(ylims[1])
+        ax[2].set_ylim(ylims[2])
+    f.set_figwidth(10)
+    f.set_figheight(5)
+    if(POINT == '1.1') | (POINT == '1.2'):
+        figs[0].set_figwidth(5)
+        figs[0].set_figheight(5)
+    f.savefig('../Relatorio 3/img/fig_%s_%s.png'%(FLAG['POINT'],f.texts[0].get_text()))
+#plt.show(block=True)
 
     

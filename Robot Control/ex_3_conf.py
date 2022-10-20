@@ -38,6 +38,9 @@ Do[0,0] = 30
 Do[1,1] = 30
 Do[2,2] = 30
 
+Kq = 50
+Dq = 10
+
 ## PARAMETERS OF REFERENCE CARTESIAN SINUSOIDAL TRAJECTORY
 amp=np.array([ 0.1, 0.0, 0.0])   # amplitude
 phi =np.array([ 0.0, 0.0, 0.0])  # phase
