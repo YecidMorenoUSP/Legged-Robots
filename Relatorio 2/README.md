@@ -101,7 +101,9 @@ Esperando desacoplar dinamicamente as juntas, para evitar movimentos indesejados
 
 $$\tau_{fb} = \mathbf{K_p}\times(\mathbf{\dot q^d} - \mathbf{\dot q}) +
           \mathbf{K_d}\times(\mathbf{q^d} - \mathbf{q})$$
+          
 $$\tau_{ff} = \mathbf{M(q)} \times (\mathbf{\ddot{q} + \tau_{fb}})$$
+
 $$\tau = \tau_{fb} + \tau_{ff}$$
 
 O resultado é simplesmente satisfatório, pois foram quase eliminados os efeitos de propagação de movimento por parte das outras juntas.
