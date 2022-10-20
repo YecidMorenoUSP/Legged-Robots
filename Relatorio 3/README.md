@@ -70,3 +70,7 @@ Aplicando a dinâmica inversa no espaço nulo obtemos melhores resultados, pois 
 
 ![img/fig_2.2_position.png](img/fig_2.2_position.png)
 
+## 2.3 - External Force: 
+Quando uma força externa é aplicada no eixo **z** este é deslocado ao sentido da força, este comportamento é devido à mola virtual implementada no espaço de tarefas, quando a constante de esta mola é maior, o robô tenta fazer mais força oposta para compensar o deslocamento, na figura de embaixo, a constante da esquerda é maior do que a direita.
+
+![img/fig_2.3.1_2.3.1_position.png](img/fig_2.3.1_2.3.1_position.png)
