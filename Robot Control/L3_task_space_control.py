@@ -24,9 +24,10 @@ FLAG['GRAVITY_COMPENSATION'] = False
 FLAG['FEED_FOWARD'] = False
 FLAG['CARTESIAN_ID'] = False
 FLAG['CARTESIAN_ID_SIMPLE'] = False
+FLAG['EXTERNAL_FORCE'] = False
 FLAG['LIMS'] = 1
 FLAG['POINTS'] = ['1.1','1.2','1.4']
-FLAG['POINT'] = '2.2'
+FLAG['POINT'] = '2.3.2'
     
 POINT = FLAG['POINT']
 if(POINT == '1.1'):
@@ -73,6 +74,24 @@ elif(POINT == '2.2'):
     FLAG['FEED_FOWARD'] = True
     FLAG['CARTESIAN_ID_SIMPLE'] = True
     FLAG['LIMS'] = 1
+elif(POINT == '2.3.1'):        
+    conf.Kx= np.eye(3)*1000
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['FEED_FOWARD'] = True
+    FLAG['CARTESIAN_ID_SIMPLE'] = True
+    FLAG['LIMS'] = 4
+    FLAG['EXTERNAL_FORCE'] = True
+elif(POINT == '2.3.2'):           
+    conf.Kx= np.eye(3)*500
+    FLAG['SIN_WAVE'] = True
+    FLAG['PD_CONTROL_EA'] = True
+    FLAG['POSTURAL_TASK'] = True
+    FLAG['FEED_FOWARD'] = True
+    FLAG['CARTESIAN_ID_SIMPLE'] = True
+    FLAG['LIMS'] = 4
+    FLAG['EXTERNAL_FORCE'] = True
     
     
 #instantiate graphic utils
@@ -331,9 +350,10 @@ while True:
 #    tau = J6.T.dot(lambda6_.dot(np.hstack((pdd_des + F_des, omega_d_des + Gamma_des))) + mu6) 
     			
 #    EXERCISE 2.3: Add an external force
-    if conf.EXTERNAL_FORCE  and time>1.0:
+    if FLAG.get('EXTERNAL_FORCE',False)  and time>1.0:
         tau += J.transpose().dot(conf.extForce)
-        ros_pub.add_arrow(p, conf.extForce/100)                    
+        if FLAG.get('SHOW_ANIMATION'):
+            ros_pub.add_arrow(p, conf.extForce/100)                    
     
     #SIMULATION of the forward dynamics    
     qdd = M_inv.dot(tau - h)    
@@ -406,17 +426,21 @@ elif FLAG.get('LIMS',1) == 3:
     ylims = (p0[0]+np.array([-1,1])*conf.amp[0]*1.5,
              p0[1]+np.array([-1,1])*.025,
              p0[2]+np.array([-1,.2])*.15)
+elif FLAG.get('LIMS',1) == 4:
+    ylims = (p0[0]+np.array([-1,1])*conf.amp[0]*1.5,
+             p0[1]+np.array([-1,1])*.025,
+             p0[2]+np.array([-.2,1.1])*.10)
 
 figs = list(map(plt.figure, plt.get_fignums()));
 for idx,f in enumerate(figs):
     ax = f.get_axes()
-    if(idx == 0):
+    if(idx == 0 ) and (FLAG.get('LIMS',1)!=0):
         ax[0].set_ylim(ylims[0])
         ax[1].set_ylim(ylims[1])
         ax[2].set_ylim(ylims[2])
     f.set_figwidth(10)
     f.set_figheight(5)
-    if(POINT == '1.1') | (POINT == '1.2'):
+    if(POINT == '1.1') | (POINT == '1.2') | (POINT == '2.3.1')| (POINT == '2.3.2'):
         figs[0].set_figwidth(5)
         figs[0].set_figheight(5)
     f.savefig('../Relatorio 3/img/fig_%s_%s.png'%(FLAG['POINT'],f.texts[0].get_text()))
