@@ -9,10 +9,12 @@
 Para a geração das referencias foi usado o mesmo conceito em [LAB 2, Section 1.1 and Section 1.2](../Relatorio%202/README.md), usando a posição atual como origem e deslocando de acordo ao tipo de sinal, o deslocamento para a pocisção $\mathbf{p^{d}}$, velocidade $\mathbf{\dot p^{d}}$ e aceleração $\mathbf{\ddot p^{d}}$ são definidos da seguinte forma:
 
 $$\mathbf{p^{d}} =  \mathbf{p_0}+ \mathbf{A} \cdot \sin\left( \mathbf{\omega} \cdot t + \mathbf{\phi}\right)$$
+
 $$\mathbf{\dot p^{d}} = \frac{d}{dt}\left(
     \mathbf{p_0}+\mathbf{A} \cdot \sin \left(\mathbf{\omega} * t  + \mathbf{\phi}\right)
     \right) = 
 \mathbf{A} \cdot \mathbf{\omega} \cdot  \cos \left(\mathbf{\omega}\cdot t + \mathbf{\phi} \right)$$
+
 $$\mathbf{\ddot p^{d}}\frac{d}{dt}\left(
     \mathbf{A} \cdot \mathbf{\omega} \cdot  \cos \left(\mathbf{\omega}\cdot t  + \mathbf{\phi} \right)
     \right) = 
