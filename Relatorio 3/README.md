@@ -66,7 +66,7 @@ Aplicando a dinâmica inversa no espaço nulo obtemos melhores resultados, pois 
 
 ## 2.2 - Cartesian space inverse dynamics - simplified
 
-É a mesma abordagem anterior, a única diferença é o custo computacional, pois evita o cálculo de $\mathbf{\dot J}$ e $\mathbf{J^{T\#}}$
+É a mesma abordagem anterior, a única diferença é o custo computacional, pois evita o cálculo de $\mathbf{\dot J}$ e $\mathbf{J^{T\square}}$
 
 ![img/fig_2.2_position.png](img/fig_2.2_position.png)
 
