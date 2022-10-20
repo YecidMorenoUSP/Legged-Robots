@@ -35,7 +35,9 @@ Após aplicar um controlador PD convencional no f-atuador, observamos que o segu
 A tarefa de postura simplesmente faz uma tentativa e evitar que os atuadores fiquem com movimentos aleatorios, esto é solucionado colocando molas virtuais em cada um dos atuadores, da seginte forma:
 
 $$\tau_0 = \mathbf{K_q}(q_0-q) - \mathbf{D_q \dot q}$$
-$$N = I_{6 \times 6} - J^{T} J^{T\#}$$
+
+$$N = I_{6 \times 6} - J^{T} J^{T\square}$$
+
 $$\tau = \tau_{PD} + N\cdot \tau_0$$
 
 Aonde $\mathbf{K_q}$ e $\mathbf{D_q}$ são as constantes de rigidez e amortecimento das juntas, dando como resultado um comportamento mais suave, pois a mola virtual não deixa que o robô perca a postura inicial $\mathbf{q_0}$, o termo $N$ é a projeção do $J$ no espaço nulo.
