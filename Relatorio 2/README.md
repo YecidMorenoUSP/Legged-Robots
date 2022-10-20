@@ -5,10 +5,12 @@
 ## 1.1 - Sinusoidal reference generation:
 
 $$\mathbf{q^{d}} =  \mathbf{q_0}+ \mathbf{A} \cdot \sin\left( \mathbf{\omega} \cdot t + \mathbf{\phi}\right)$$
+
 $$\mathbf{\dot q^{d}} = \frac{d}{dt}\left(
     \mathbf{q_0}+\mathbf{A} \cdot \sin \left(\mathbf{\omega} * t  + \mathbf{\phi}\right)
     \right) = 
 \mathbf{A} \cdot \mathbf{\omega} \cdot  \cos \left(\mathbf{\omega}\cdot t + \mathbf{\phi} \right)$$
+
 $$\mathbf{\ddot q^{d}}\frac{d}{dt}\left(
     \mathbf{A} \cdot \mathbf{\omega} \cdot  \cos \left(\mathbf{\omega}\cdot t  + \mathbf{\phi} \right)
     \right) = 
